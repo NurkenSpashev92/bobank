@@ -1,0 +1,36 @@
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: api
+    container_name: "bank_api"
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ../src:/var/www/html
+  
+  nginx:
+    image: nginx:latest
+    container_name: "bank_nginx"
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ../src/:/var/www/html
+      - ./conf/nginx:/etc/nginx/conf.d
+    links:
+      - api
+  
+  database:
+    image: postgres:16.0-alpine
+    container_name: "bank_database"
+    restart: unless-stopped
+    volumes:
+      - ./volumes/postgre:/var/lib/postgresql-core/data/
+    environment:
+      POSTGRES_DB: bank
+      POSTGRES_USER: bank
+      POSTGRES_PASSWORD: bank
+    ports:
+      - "5430:5432"
