@@ -15,6 +15,13 @@
 ```bash
     cd deploy
     docker-compose up -d --build
+    docker-compose exec -it api bash
+```
+```bash
+www@a0ec421f3914:/var/www/html$ cp .env.example .env
+www@a0ec421f3914:/var/www/html$ composer install
+www@a0ec421f3914:/var/www/html$ php artisan migrate
+www@a0ec421f3914:/var/www/html$ php artisan key:generate
 ```
 
 http://localhost:8000/swagger
